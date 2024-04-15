@@ -12,8 +12,16 @@ export default class CountryService {
         return this.db.find();
     }
 
-    async createCountry({ code, name, emoji }: InputCreate) {
-        const newCountry = this.db.create({ code, name, emoji });
+    async createCountry({ code, name, emoji, continent }: InputCreate) {
+        const newCountry = this.db.create({ code, name, emoji, continent });
         return await this.db.save(newCountry);
+    }
+
+    async getCountryByCode(code: string) {
+        return await this.db.findOneBy({ code });
+    }
+
+    async getAllCountryByContinent(continent: string) {
+        return await this.db.find({ where : { continent } });
     }
 }
