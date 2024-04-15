@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql';
 import { Repository } from "typeorm";
 import datasource from "../lib/datasource";
 import { Country, InputCreate } from "../entities/country.entity";
@@ -18,10 +19,12 @@ export default class CountryService {
     }
 
     async getCountryByCode(code: string) {
-        return await this.db.findOneBy({ code });
+        const country = await this.db.findOneBy({ code });
+        if (!country) throw new GraphQLError("Aucun pays ne correspond.");
+        return country;
     }
 
     async getAllCountryByContinent(continent: string) {
-        return await this.db.find({ where : { continent } });
+        return await this.db.find({ where: { continent }});
     }
 }
